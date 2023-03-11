@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>AES 加密助手</title>
+    <link rel="bookmark" href="favicon.ico" type="image/x-icon"/>
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link href="https://apps.bdimg.com/libs/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet"/>
+    <script src="https://apps.bdimg.com/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="https://apps.bdimg.com/libs/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <style>
+        html, body {
+            margin: 0 auto;
+            padding: 0;
+            min-width: 800px;
+            background-color: rgba(230, 230, 250, 0.1);
+        }
+
+        #dlgbox {
+            margin: 5% auto 5%;
+            padding: 2% 5%;
+            width: 500px;
+        }
+
+        .input_label {
+            width: 80px;
+        }
+
+        .input_group {
+            padding: 5px 0;
+            vertical-align: middle;
+        }
+
+        form {
+            vertical-align: middle;
+        }
+
+        .btn {
+            width: 70px;
+        }
+    </style>
+</head>
+<body class="container">
+<div class="jumbotron" id="dlgbox">
+    <h2 class="text-center">AES加密助手</h2>
+    <form id="spec_info" onsubmit="return false;">
+        <div class="input_group">
+            <label class="input_label" for="upload_file">
+                加密文件:
+            </label>
+            <input id="upload_file" type="file" name="upload_file" required="required" style="display: inline-block;">
+        </div>
+        <div class="input_group">
+            <label class="input_label" for="aeskey">
+                密匙:
+            </label>
+            <input id="aeskey" type="text" name="aeskey" required="required">
+        </div>
+        <div class="text-center input_group">
+            <button type="button" class="btn btn-primary" onclick="encrypt()">加密</button>
+        </div>
+    </form>
+</div>
+<script type="text/javascript">
+    function encrypt() {
+        var buffer;
+        var reader = new FileReader();
+        reader.readAsArrayBuffer($("#upload_file")[0].files[0]);
+        reader.onload = function () {
+            console.log(CryptoJS.enc.Base64.stringify(CryptoJS.AES.encrypt(CryptoJS.lib.WordArray.create(reader.result), CryptoJS.enc.Utf8.parse($("#aeskey").val()), {
+                mode: CryptoJS.mode.ECB,
+                padding: CryptoJS.pad.Pkcs7
+            }).ciphertext));
+        };
+    }
+</script>
+</body>
+</html>
